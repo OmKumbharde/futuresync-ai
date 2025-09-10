@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { UserButton } from "@clerk/clerk-react"
+import { CLERK_PUBLISHABLE_KEY } from "@/lib/clerk"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -86,13 +87,19 @@ const Dashboard = () => {
               <Plus className="w-4 h-4" />
               New Project
             </HeroButton>
-            <UserButton 
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8"
-                }
-              }}
-            />
+            {CLERK_PUBLISHABLE_KEY ? (
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: "w-8 h-8"
+                  }
+                }}
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gradient-brand flex items-center justify-center">
+                <span className="text-sm font-bold text-primary-foreground">D</span>
+              </div>
+            )}
           </div>
         </div>
       </header>

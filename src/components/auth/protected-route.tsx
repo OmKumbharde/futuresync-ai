@@ -1,11 +1,17 @@
 import { useAuth } from "@clerk/clerk-react"
 import { Navigate } from "react-router-dom"
+import { CLERK_PUBLISHABLE_KEY } from "@/lib/clerk"
 
 interface ProtectedRouteProps {
   children: React.ReactNode
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  // If no Clerk key, allow access for demo purposes
+  if (!CLERK_PUBLISHABLE_KEY) {
+    return <>{children}</>
+  }
+
   const { isLoaded, isSignedIn } = useAuth()
   
   if (!isLoaded) {
