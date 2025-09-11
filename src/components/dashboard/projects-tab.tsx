@@ -6,12 +6,16 @@ import { HeroButton } from "@/components/ui/hero-button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProjectDialog } from "./project-dialog"
+import { TaskCompletionModal } from "./task-completion-modal"
+import { useToast } from "@/hooks/use-toast"
 import { 
   Search, 
   Filter, 
   Plus,
   X,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Target,
+  Play
 } from "lucide-react"
 
 interface Project {
@@ -44,6 +48,20 @@ export function ProjectsTab({ myProjects, availableProjects, onEnrollProject, on
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all")
   const [tagFilter, setTagFilter] = useState<string>("all")
   const [showFilters, setShowFilters] = useState(false)
+  const [taskCompletionModal, setTaskCompletionModal] = useState<{
+    isOpen: boolean
+    projectTitle: string
+    taskTitle: string
+    xpAwarded: number
+    achievements: any[]
+  }>({
+    isOpen: false,
+    projectTitle: "",
+    taskTitle: "",
+    xpAwarded: 0,
+    achievements: []
+  })
+  const { toast } = useToast()
 
   // Get all unique tags
   const allTags = Array.from(new Set(availableProjects.flatMap(p => p.tags)))
@@ -65,6 +83,44 @@ export function ProjectsTab({ myProjects, availableProjects, onEnrollProject, on
   }
 
   const hasActiveFilters = searchTerm || difficultyFilter !== "all" || tagFilter !== "all"
+
+  const handleCompleteTask = (projectId: number) => {
+    const project = myProjects.find(p => p.id === projectId)
+    if (project) {
+      const taskNames = [
+        "Set up development environment",
+        "Implement user authentication",
+        "Create database schema",
+        "Build API endpoints",
+        "Write unit tests",
+        "Deploy to staging",
+        "Performance optimization",
+        "Code review"
+      ]
+      
+      const randomTask = taskNames[Math.floor(Math.random() * taskNames.length)]
+      const xpAwarded = Math.floor(Math.random() * 100) + 50
+      
+      // Random chance to unlock achievements
+      const achievements = Math.random() > 0.7 ? [
+        {
+          id: Date.now(),
+          name: "Task Master",
+          description: "Complete 5 tasks in a single day",
+          xp: 25,
+          rarity: "Rare"
+        }
+      ] : []
+
+      setTaskCompletionModal({
+        isOpen: true,
+        projectTitle: project.title,
+        taskTitle: randomTask,
+        xpAwarded,
+        achievements
+      })
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -194,13 +250,21 @@ export function ProjectsTab({ myProjects, availableProjects, onEnrollProject, on
                       </div>
                     </div>
                     
-                    <div className="flex gap-2">
+                     <div className="flex gap-2">
                       <HeroButton 
                         variant="hero" 
                         className="flex-1"
                         onClick={() => onContinueProject(project.id)}
                       >
+                        <Play className="w-4 h-4" />
                         Continue Working
+                      </HeroButton>
+                      <HeroButton 
+                        variant="hero-outline"
+                        onClick={() => handleCompleteTask(project.id)}
+                      >
+                        <Target className="w-4 h-4" />
+                        Complete Task
                       </HeroButton>
                       <Dialog>
                         <DialogTrigger asChild>
@@ -373,6 +437,22 @@ export function ProjectsTab({ myProjects, availableProjects, onEnrollProject, on
           </div>
         </div>
       </div>
+
+      <TaskCompletionModal
+        isOpen={taskCompletionModal.isOpen}
+        onClose={() => setTaskCompletionModal(prev => ({ ...prev, isOpen: false }))}
+        projectTitle={taskCompletionModal.projectTitle}
+        taskTitle={taskCompletionModal.taskTitle}
+        xpAwarded={taskCompletionModal.xpAwarded}
+        achievementsUnlocked={taskCompletionModal.achievements}
+        onConfirm={() => {
+          // Here you would update the project progress and user stats
+          toast({
+            title: "Progress Updated! 🚀",
+            description: "Your project progress and XP have been updated.",
+          })
+        }}
+      />
     </div>
   )
 }
