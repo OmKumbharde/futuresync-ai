@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { UserButton } from "@clerk/clerk-react"
 import { CLERK_PUBLISHABLE_KEY } from "@/lib/clerk"
 import { Card } from "@/components/ui/card"
@@ -24,6 +25,7 @@ import {
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("projects")
+  const navigate = useNavigate()
   const { toast } = useToast()
 
   // User stats

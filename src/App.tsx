@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import Workspace from "./pages/Workspace";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,13 @@ const App = () => (
                 <Dashboard />
               </ProtectedRoute>
             } 
+          />
+          <Route path="/workspace/:projectId" 
+            element={
+              <ProtectedRoute>
+                <Workspace />
+              </ProtectedRoute>
+            }
           />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
