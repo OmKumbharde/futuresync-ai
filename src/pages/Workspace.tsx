@@ -13,7 +13,6 @@ import {
   SandpackCodeEditor,
   SandpackPreview,
 } from "@codesandbox/sandpack-react";
-import "@codesandbox/sandpack-react/dist/index.css";
 import { ArrowLeft } from "lucide-react";
 
 const defaultFiles: Record<string, string> = {
