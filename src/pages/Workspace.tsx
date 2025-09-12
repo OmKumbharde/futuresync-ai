@@ -4,8 +4,12 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HeroButton } from "@/components/ui/hero-button";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectSidebar, type WorkspaceProject } from "@/components/workspace/ProjectSidebar";
 import { KanbanBoard } from "@/components/workspace/KanbanBoard";
+import { Terminal } from "@/components/workspace/Terminal";
+import { ConsoleOutput } from "@/components/workspace/ConsoleOutput";
+import { CodeRunner } from "@/components/workspace/CodeRunner";
 import {
   SandpackProvider,
   SandpackLayout,
@@ -89,20 +93,26 @@ export default function Workspace() {
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={38} minSize={25} className="bg-card/50">
-            <div className="h-full p-4 space-y-3 overflow-y-auto">
-              <Card className="p-4 bg-gradient-card border-border/50">
-                <h3 className="font-semibold mb-2">Project Activity</h3>
-                <ul className="text-sm text-muted-foreground list-disc pl-5 space-y-1">
-                  <li>Initialized workspace</li>
-                  <li>Edited App.js (demo)</li>
-                  <li>Live preview refreshed</li>
-                </ul>
-              </Card>
-              <Card className="p-4 bg-gradient-card border-border/50">
-                <h3 className="font-semibold mb-2">Environment</h3>
-                <div className="text-sm text-muted-foreground">React runtime in-browser via Sandpack (demo).</div>
-              </Card>
-            </div>
+            <Tabs defaultValue="console" className="h-full flex flex-col">
+              <div className="p-3 border-b border-border/50">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="console" className="text-xs">Console</TabsTrigger>
+                  <TabsTrigger value="terminal" className="text-xs">Terminal</TabsTrigger>
+                  <TabsTrigger value="runner" className="text-xs">Runner</TabsTrigger>
+                </TabsList>
+              </div>
+              <div className="flex-1 overflow-hidden">
+                <TabsContent value="console" className="h-full m-0 p-0">
+                  <ConsoleOutput />
+                </TabsContent>
+                <TabsContent value="terminal" className="h-full m-0 p-0">
+                  <Terminal />
+                </TabsContent>
+                <TabsContent value="runner" className="h-full m-0 p-0">
+                  <CodeRunner />
+                </TabsContent>
+              </div>
+            </Tabs>
           </ResizablePanel>
         </ResizablePanelGroup>
 
