@@ -135,17 +135,12 @@ const Dashboard = () => {
   }
 
   const handleContinueProject = (projectId: number) => {
+    const project = myProjects.find(p => p.id === projectId)
     toast({
       title: "Opening Workspace",
       description: "Redirecting to your project workspace...",
     })
-    // In a real app, this would navigate to the workspace
-    setTimeout(() => {
-      toast({
-        title: "Workspace Ready! 💻",
-        description: "Your development environment is now active.",
-      })
-    }, 1500)
+    navigate(`/workspace/${projectId}`, { state: { project } })
   }
 
   return (
